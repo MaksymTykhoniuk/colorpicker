@@ -5,12 +5,18 @@ import {
   Button,
   ColorPicker,
   Message,
+  CountList,
+  CountListItem,
+  CountListItemRight,
+  CountListItemWrong,
 } from './App.styled';
 
 export const App = () => {
   const [color, setColor] = useState('');
   const [answers, setAnswers] = useState([]);
   const [message, setMessage] = useState('');
+  const [rightAnswer, setRightAnswer] = useState(0);
+  const [wrongAnswer, setWrongAnswer] = useState(0);
 
   const [rerun, setRerun] = useState(false);
 
@@ -28,14 +34,32 @@ export const App = () => {
   const henaldeRightAnswer = answer => {
     if (color === answer) {
       setMessage('Right answer');
+      setRightAnswer(prev => prev + 1);
       setRerun(prev => !prev);
     } else {
       setMessage('Wrong answer');
+      setWrongAnswer(prev => prev + 1);
     }
+  };
+
+  const handleResetCount = () => {
+    setRightAnswer(0);
+    setWrongAnswer(0);
+    setMessage('');
   };
 
   return (
     <ColorPicker>
+      <CountList>
+        <CountListItem>total count: {rightAnswer + wrongAnswer}</CountListItem>
+        <CountListItemRight>rigth answer: {rightAnswer}</CountListItemRight>
+        <CountListItemWrong>wrong answer: {wrongAnswer}</CountListItemWrong>
+      </CountList>
+
+      <Button onClick={handleResetCount} type="button">
+        Reset count
+      </Button>
+
       <Container style={{ backgroundColor: color }} />
       <ButtonList>
         {answers.map(answer => (
